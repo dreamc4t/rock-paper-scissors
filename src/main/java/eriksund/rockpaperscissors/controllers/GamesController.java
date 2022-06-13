@@ -30,7 +30,7 @@ public class GamesController {
         Game game = new Game(g.getP1Name());
         gamesRepository.save(game);
 
-        return ResponseEntity.ok("Nytt game startat av dig: " + game.getP1Name() + ". Game-ID:t är " + game.getId());
+        return ResponseEntity.ok(String.format("Nytt game startat av dig, %s. Game-ID:t är %s", game.getP1Name(), game.getId()));
     }
 
 
@@ -66,7 +66,8 @@ public class GamesController {
 
         //om båda spelare gjort move - se vem som vinner
         if (game.getP1Move() != null && game.getP2Move() != null) {
-            runGame(game);
+            ;
+            return ResponseEntity.ok(runGame(game));
         }
 
         gamesRepository.save(game);
@@ -75,7 +76,7 @@ public class GamesController {
 
     }
     
-    private void runGame(Game g) {
+    private String runGame(Game g) {
         String p1move = g.getP1Move();
         String p2move = g.getP2Move();
         String p1Name = g.getP1Name();
@@ -87,6 +88,7 @@ public class GamesController {
         if (p1move.equals(p2move)) {
             System.out.println("Det blev oavgjort!");
             g.setWinner("Oavgjort");
+            return String.format("Båda spelarna tog %s. Oavgjort!", p1move);
         }
 
         if (p1move.equals("rock") && p2move.equals("paper")) {
@@ -113,6 +115,7 @@ public class GamesController {
         if (g.getWinner().equals(p2Name)) {
             System.out.println(p2Name + " vann!");
         }
+        return String.format("%s gjorde %s och %s gjorde %s. Vinnaren är %s! Grattis", p1Name, p1move, p2Name, p2move, g.getWinner());
     }
 
 }
