@@ -3,8 +3,6 @@ package eriksund.rockpaperscissors.controllers;
 
 import eriksund.rockpaperscissors.models.Game;
 import eriksund.rockpaperscissors.models.Move;
-import eriksund.rockpaperscissors.repositories.GamesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

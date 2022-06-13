@@ -1,8 +1,7 @@
 package eriksund.rockpaperscissors.models;
 
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import java.util.UUID;
 
@@ -50,7 +49,12 @@ public class Game {
     }
 
     public void setP2Name(String p2Name) {
-        this.p2Name = p2Name;
+        if (p2Name.equals(this.getP1Name())) {
+            this.p2Name = p2Name + "_1";
+        }
+        else {
+            this.p2Name = p2Name;
+        }
     }
 
     public String getP1Move() {
