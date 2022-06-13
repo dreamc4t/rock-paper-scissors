@@ -8,58 +8,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/games")
 public class GamesController {
 
-    @Autowired
-    GamesRepository gamesRepository;
-
-    @GetMapping("/all")
-    public List<Game> getAllGames() {
-        return gamesRepository.findAll();
-    }
+    public List<Game> listOfGames = new ArrayList<>();
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getGameById(@PathVariable("id") String id) {
+        //UUID för stort för att ha i @PathVariable, därför måste det konverteras från sträng till UUID
+        UUID uuid = UUID.fromString(id);
+        //om match med ID:t finns, lägg till spelare2
+        Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
+        return ResponseEntity.ok(game);
+    }
 
-        Optional<Game> gameData = gamesRepository.findById(id);
-        return ResponseEntity.ok(gameData);
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllGames() {
+
+        return ResponseEntity.ok(listOfGames);
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@RequestBody Game g) {
 
         Game game = new Game(g.getP1Name());
-        gamesRepository.save(game);
+        listOfGames.add(game);
 
         return ResponseEntity.ok(String.format("Nytt game startat av dig, %s. Game-ID:t är %s", game.getP1Name(), game.getId()));
     }
 
 
-    @PutMapping("/{id}/join")
+    @PutMapping("/join/{id}")
     public ResponseEntity<?> joinGame(@PathVariable("id") String id, @RequestBody String p2Name) {
-
+        //UUID för stort för att ha i @PathVariable, därför måste det konverteras från sträng till UUID
+        UUID uuid = UUID.fromString(id);
         //om match med ID:t finns, lägg till spelare2
-        Optional<Game> gameData = gamesRepository.findById(id);
-        Game game = gameData.get();
+        Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
         game.setP2Name(p2Name);
-
-        gamesRepository.save(game);
 
         return ResponseEntity.ok("Du har nu anslutit dig till spelet, " + game.getP2Name() + "! Game-ID:t är " + game.getId());
 
     }
 
-    @PutMapping("/{id}/move")
+    @PutMapping("/move/{id}")
     public ResponseEntity<?> makeAMove(@PathVariable("id") String id, @RequestBody Move mo) {
-
-        Optional<Game> gameData = gamesRepository.findById(id);
-        Game game = gameData.get();
+        UUID uuid = UUID.fromString(id);
+        Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
 
         Move move = new Move(mo.getPlayerName(), mo.getMove().toLowerCase());
 
@@ -74,11 +71,9 @@ public class GamesController {
         //om båda spelare gjort move - se vem som vinner
         if (game.getP1Move() != null && game.getP2Move() != null) {
             String setWinner = runGame(game);
-            gamesRepository.save(game);
             return ResponseEntity.ok(setWinner);
         }
 
-        gamesRepository.save(game);
 
         return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
 

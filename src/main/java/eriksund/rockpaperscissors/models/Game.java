@@ -4,17 +4,12 @@ package eriksund.rockpaperscissors.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document (collection = "games")
+import java.util.UUID;
+
 public class Game {
 
-    enum Moves {
-        ROCK,
-        PAPER,
-        SCISSORS
-    }
 
-    @Id
-    private String id;
+    UUID id;
     private String p1Name;
     private String p2Name;
 
@@ -26,19 +21,19 @@ public class Game {
 
 
     public  Game() {
+        setId(UUID.randomUUID());
     }
 
     public Game(String p1Name) {
         this.p1Name = p1Name;
+        setId(UUID.randomUUID());
     }
 
-
-
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
