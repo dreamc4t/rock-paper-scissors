@@ -32,50 +32,6 @@ public class Game {
         this.p1Name = p1Name;
     }
 
-    //    public String runGame() {
-//        System.out.println("NU KÖR VI GAMEEE");
-//        if (p1move == p2move) {
-//            System.out.println("Oavjort...");
-//            return "Ni tog båda " + p1move + ". Matchen oavgjord...";
-//        }
-//        String bothPlayersMoves = String.format("%s tog %s. %s tog %s.", p1Name, p1move, p2Name, p2move);
-//        String player1Won = bothPlayersMoves + String.format("%s vann, grattis!", p1Name);
-//        String player2Won = String.format("%s vann, grattis!", p2Name);
-//
-//        System.out.println(bothPlayersMoves);
-//
-//        switch (p1move) {
-//            case "rock":
-//                switch (p2move) {
-//                    case "paper": {
-//                        return  player2Won ;
-//                    }
-//                    case "scissors": {
-//                        return player1Won;
-//                    }
-//                }
-//            case  "paper":
-//                switch (p2move) {
-//                    case "scissors": {
-//                        return  player2Won;
-//                    }
-//                    case "rock": {
-//                        return player1Won;
-//                    }
-//                }
-//            case "scissors":
-//                switch (p2move) {
-//                    case  "paper": {
-//                        return player1Won;
-//                    }
-//                    case "rock": {
-//                        return player2Won;
-//                    }
-//                }
-//        }
-//        return null;
-//
-//    }
 
 
     public String getId() {

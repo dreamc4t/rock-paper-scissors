@@ -24,6 +24,13 @@ public class GamesController {
         return gamesRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getGameById(@PathVariable("id") String id) {
+
+        Optional<Game> gameData = gamesRepository.findById(id);
+        return ResponseEntity.ok(gameData);
+    }
+
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@RequestBody Game g) {
 
@@ -66,8 +73,9 @@ public class GamesController {
 
         //om båda spelare gjort move - se vem som vinner
         if (game.getP1Move() != null && game.getP2Move() != null) {
-            ;
-            return ResponseEntity.ok(runGame(game));
+            String setWinner = runGame(game);
+            gamesRepository.save(game);
+            return ResponseEntity.ok(setWinner);
         }
 
         gamesRepository.save(game);
@@ -75,18 +83,21 @@ public class GamesController {
         return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
 
     }
-    
+
+
+
+
     private String runGame(Game g) {
         String p1move = g.getP1Move();
         String p2move = g.getP2Move();
         String p1Name = g.getP1Name();
         String p2Name = g.getP2Name();
 
-        System.out.println(p1Name + " tog " + p1move);
-        System.out.println(p2Name + " tog " + p2move);
+//        System.out.println(p1Name + " tog " + p1move);
+//        System.out.println(p2Name + " tog " + p2move);
 
         if (p1move.equals(p2move)) {
-            System.out.println("Det blev oavgjort!");
+//            System.out.println("Det blev oavgjort!");
             g.setWinner("Oavgjort");
             return String.format("Båda spelarna tog %s. Oavgjort!", p1move);
         }
@@ -109,12 +120,12 @@ public class GamesController {
         if (p1move.equals("scissors") && p2move.equals("paper")) {
             g.setWinner(p1Name);
         }
-        if (g.getWinner().equals(p1Name)) {
-            System.out.println(p1Name + " vann!");
-        }
-        if (g.getWinner().equals(p2Name)) {
-            System.out.println(p2Name + " vann!");
-        }
+//        if (g.getWinner().equals(p1Name)) {
+//            System.out.println(p1Name + " vann!");
+//        }
+//        if (g.getWinner().equals(p2Name)) {
+//            System.out.println(p2Name + " vann!");
+//        }
         return String.format("%s gjorde %s och %s gjorde %s. Vinnaren är %s! Grattis", p1Name, p1move, p2Name, p2move, g.getWinner());
     }
 
