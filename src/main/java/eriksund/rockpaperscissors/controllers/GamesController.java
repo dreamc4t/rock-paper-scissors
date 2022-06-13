@@ -71,7 +71,7 @@ public class GamesController {
 
         gamesRepository.save(game);
 
-        return ResponseEntity.ok("trying to make a move..." + move.getPlayerName() + " " +  game.getP1Name() + " " + game.getP2Name() + "\n" +  move.getMove()+ "\n" + mo.getMove());
+        return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
 
     }
     
