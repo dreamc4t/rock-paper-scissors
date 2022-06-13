@@ -64,7 +64,10 @@ public class GamesController {
         }
 
 
-        runGame(game);
+        //om båda spelare gjort move - se vem som vinner
+        if (game.getP1Move() != null && game.getP2Move() != null) {
+            runGame(game);
+        }
 
         gamesRepository.save(game);
 
@@ -82,9 +85,8 @@ public class GamesController {
         System.out.println(p2Name + " tog " + p2move);
 
         if (p1move.equals(p2move)) {
-            System.out.println("Samma move var det här ja");
+            System.out.println("Det blev oavgjort!");
             g.setWinner("Oavgjort");
-            return;
         }
 
         if (p1move.equals("rock") && p2move.equals("paper")) {
@@ -93,15 +95,24 @@ public class GamesController {
         if (p1move.equals("rock") && p2move.equals("scissors")) {
             g.setWinner(p1Name);
         }
-
-
-
-
-
-
-
-
-
+        if (p1move.equals("paper") && p2move.equals("scissors")) {
+            g.setWinner(p2Name);
         }
+        if (p1move.equals("paper") && p2move.equals("rock")) {
+            g.setWinner(p1Name);
+        }
+        if (p1move.equals("scissors") && p2move.equals("rock")) {
+            g.setWinner(p2Name);
+        }
+        if (p1move.equals("scissors") && p2move.equals("paper")) {
+            g.setWinner(p1Name);
+        }
+        if (g.getWinner().equals(p1Name)) {
+            System.out.println(p1Name + " vann!");
+        }
+        if (g.getWinner().equals(p2Name)) {
+            System.out.println(p2Name + " vann!");
+        }
+    }
 
 }
