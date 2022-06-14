@@ -22,12 +22,26 @@ public class GamesController {
         UUID uuid = UUID.fromString(id);
         //om match med ID:t finns, lägg till spelare2
         Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
-        return ResponseEntity.ok(game);
+
+        //Ej kunna se spelets tillstånd förrän en vinnare är utsedd (för att ej kunna se den andres drag)
+        if (game.getWinner() != null) {
+            return ResponseEntity.ok(game);
+        }
+        else {
+            return ResponseEntity.ok("Både måste göra sina drag innan ni kan se spelet, annars ser ni vad motståndaren tagit för drag!");
+        }
+
     }
     /* Hämta en lista över alla games */
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllGames() {
-        return ResponseEntity.ok(listOfGames);
+    @GetMapping("/history")
+    public ResponseEntity<?> getAllFinishedGames() {
+
+        //endast avklarade games visas, för att inte kunna sneaka in och se pågående och vad motståndaren har tagit!
+        List<Game> tempListOfGames = listOfGames.stream()
+                .filter(game -> game.getWinner() != null).toList();
+
+        //return ResponseEntity.ok(listOfGames);
+        return ResponseEntity.ok(tempListOfGames);
     }
 
     /* Skapa ett nytt game, med ens eget namn som body
@@ -72,6 +86,7 @@ public class GamesController {
                 game.setP1Move(move.getMove());
             }
             if (game.getP2Name().equals(move.getPlayerName()) ) {
+
                 game.setP2Move(move.getMove());
             }
 
