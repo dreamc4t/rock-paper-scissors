@@ -27,7 +27,6 @@ public class GamesController {
     /* Hämta en lista över alla games */
     @GetMapping("/all")
     public ResponseEntity<?> getAllGames() {
-
         return ResponseEntity.ok(listOfGames);
     }
 
@@ -79,7 +78,7 @@ public class GamesController {
 
             //om båda spelare gjort move - se vem som vinner
             if (game.getP1Move() != null && game.getP2Move() != null) {
-                String setWinner = runGame(game);
+                String setWinner = game.runGame();
                 return ResponseEntity.ok(setWinner);
             }
 
@@ -90,57 +89,6 @@ public class GamesController {
             return ResponseEntity.ok("Endast 'rock', 'paper' eller 'scissors' är tillåtna moves!");
         }
 
-
-
-    }
-
-
-
-    /* Köra spelet. Spelets logik osv. Då det känns svårt att skala upp
-    sten sax påse nöjde jag mig med ett gäng if-satser istället för en mer
-    avancerad logik*/
-    private String runGame(Game g) {
-
-        //move+namn för givet game skrivs om för att ge bättre läsförståelse i resten av metoden
-        String p1move = g.getP1Move();
-        String p2move = g.getP2Move();
-        String p1Name = g.getP1Name();
-        String p2Name = g.getP2Name();
-
-//        System.out.println(p1Name + " tog " + p1move);
-//        System.out.println(p2Name + " tog " + p2move);
-
-        if (p1move.equals(p2move)) {
-//            System.out.println("Det blev oavgjort!");
-            g.setWinner("Oavgjort");
-            return String.format("Båda spelarna tog %s. Oavgjort!", p1move);
-        }
-
-        if (p1move.equals("rock") && p2move.equals("paper")) {
-            g.setWinner(p2Name);
-        }
-        if (p1move.equals("rock") && p2move.equals("scissors")) {
-            g.setWinner(p1Name);
-        }
-        if (p1move.equals("paper") && p2move.equals("scissors")) {
-            g.setWinner(p2Name);
-        }
-        if (p1move.equals("paper") && p2move.equals("rock")) {
-            g.setWinner(p1Name);
-        }
-        if (p1move.equals("scissors") && p2move.equals("rock")) {
-            g.setWinner(p2Name);
-        }
-        if (p1move.equals("scissors") && p2move.equals("paper")) {
-            g.setWinner(p1Name);
-        }
-//        if (g.getWinner().equals(p1Name)) {
-//            System.out.println(p1Name + " vann!");
-//        }
-//        if (g.getWinner().equals(p2Name)) {
-//            System.out.println(p2Name + " vann!");
-//        }
-        return String.format("%s gjorde %s och %s gjorde %s. Vinnaren är %s! Grattis", p1Name, p1move, p2Name, p2move, g.getWinner());
     }
 
 }
