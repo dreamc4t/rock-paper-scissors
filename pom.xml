@@ -11,6 +11,7 @@
 	<groupId>eriksund</groupId>
 	<artifactId>rock-paper-scissors</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>rock-paper-scissors</name>
 	<description>Sten, sax, påse 4 ever</description>
 	<properties>
