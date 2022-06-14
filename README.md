@@ -1,6 +1,11 @@
-# rock-paper-scissors
+# rock-paper-scissors app
+Backend REST api för att spela sten sax påse. Skrivet i java mha maven och spring (skapat genom spring boot). 
 
-# Köra i postman
+## Bygg + starta via jar-fil
+- Ta dig till projektmappen via termlinalen och slå sedan in
+- java -jar target/rock-paper-scissors-0.0.1-SNAPSHOT.jar
+
+## Köra i postman
 - Spring port default är satt till 8080, kör du via en annan port så byt till denna 
 
 ### 1. Skapa nytt game
@@ -22,7 +27,8 @@
 ### Hitta game via dess id
 - GET request till
 - http://localhost:8080/api/games/{ID} där ID är det du fått vid spelskapande/fått av spelskaparen
+- Visar endast om spelet är avslutat
 
-### Se lista över alla games 
+### Se lista över alla avklarade game
 - GET request till
-- http://localhost:8080/api/games/all
+- http://localhost:8080/api/games/history
