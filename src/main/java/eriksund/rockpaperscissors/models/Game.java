@@ -19,7 +19,9 @@ public class Game {
 
 
 
+    //redundant constructor för nu, men kan komma att användas längre fram
     public  Game() {
+        //skapa ett UUID som ID för varje nytt game
         setId(UUID.randomUUID());
     }
 

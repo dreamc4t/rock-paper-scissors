@@ -12,8 +12,10 @@ import java.util.*;
 @RequestMapping("api/games")
 public class GamesController {
 
-    public List<Game> listOfGames = new ArrayList<>();
+    /* Skapa en lista över games, ArrayList pga dynamisk */
+    ArrayList<Game> listOfGames= new ArrayList<Game>();
 
+    /* Hämta ett game via dess ID */
     @GetMapping("/{id}")
     public ResponseEntity<?> getGameById(@PathVariable("id") String id) {
         //UUID för stort för att ha i @PathVariable, därför måste det konverteras från sträng till UUID
@@ -22,13 +24,16 @@ public class GamesController {
         Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
         return ResponseEntity.ok(game);
     }
-
+    /* Hämta en lista över alla games */
     @GetMapping("/all")
     public ResponseEntity<?> getAllGames() {
 
         return ResponseEntity.ok(listOfGames);
     }
 
+    /* Skapa ett nytt game, med ens eget namn som body
+    * Alt lägga till så att man kan göra ett move i skapandet av gamet också
+    * aka overloada constructorn */
     @PostMapping("/new")
     public ResponseEntity<?> newGame(@RequestBody Game g) {
 
@@ -38,7 +43,9 @@ public class GamesController {
         return ResponseEntity.ok(String.format("Nytt game startat av dig, %s. Game-ID:t är %s", game.getP1Name(), game.getId()));
     }
 
-
+    /* Joina ett game utifrån ID, skicka med ens namn som body
+    är det samma namn på båda spelarna läggs _1 till efter namnet (och syns i Response)
+    * alt även här lägga till så att man kan skicka med sitt move direkt */
     @PutMapping("/join/{id}")
     public ResponseEntity<?> joinGame(@PathVariable("id") String id, @RequestBody String p2Name) {
         //UUID för stort för att ha i @PathVariable, därför måste det konverteras från sträng till UUID
@@ -51,6 +58,7 @@ public class GamesController {
 
     }
 
+    /* Göra sitt move. Rätt game nås via ID, sedan skickar man med namn + move */
     @PutMapping("/move/{id}")
     public ResponseEntity<?> makeAMove(@PathVariable("id") String id, @RequestBody Move mo) {
         UUID uuid = UUID.fromString(id);
@@ -79,8 +87,12 @@ public class GamesController {
 
 
 
-
+    /* Köra spelet. Spelets logik osv. Då det känns svårt att skala upp
+    sten sax påse nöjde jag mig med ett gäng if-satser istället för en mer
+    avancerad logik*/
     private String runGame(Game g) {
+
+        //move+namn för givet game skrivs om för att ge bättre läsförståelse i resten av metoden
         String p1move = g.getP1Move();
         String p2move = g.getP2Move();
         String p1Name = g.getP1Name();

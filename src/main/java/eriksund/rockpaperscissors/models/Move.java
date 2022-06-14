@@ -1,5 +1,6 @@
 package eriksund.rockpaperscissors.models;
 
+
 public class Move {
     public String playerName;
     public String move;
