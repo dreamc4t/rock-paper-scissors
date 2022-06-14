@@ -64,24 +64,33 @@ public class GamesController {
         UUID uuid = UUID.fromString(id);
         Game game = listOfGames.stream().filter(listOfGames ->uuid.equals(listOfGames.getId())).findAny().orElse(null);
 
+        //skapar move utifrån modellen move
         Move move = new Move(mo.getPlayerName(), mo.getMove().toLowerCase());
 
-        if (game.getP1Name().equals(move.getPlayerName()) ) {
-            game.setP1Move(move.getMove());
+        //if else för att se om movet som skickas med i body är 'rock', 'paper' eller 'scissors'
+        if (move.getMove().equals("rock")|| move.getMove().equals("paper") || move.getMove().equals("scissors")) {
+            if (game.getP1Name().equals(move.getPlayerName()) ) {
+                game.setP1Move(move.getMove());
+            }
+            if (game.getP2Name().equals(move.getPlayerName()) ) {
+                game.setP2Move(move.getMove());
+            }
+
+
+            //om båda spelare gjort move - se vem som vinner
+            if (game.getP1Move() != null && game.getP2Move() != null) {
+                String setWinner = runGame(game);
+                return ResponseEntity.ok(setWinner);
+            }
+
+
+            return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
         }
-        if (game.getP2Name().equals(move.getPlayerName()) ) {
-            game.setP2Move(move.getMove());
+        else {
+            return ResponseEntity.ok("Endast 'rock', 'paper' eller 'scissors' är tillåtna moves!");
         }
 
 
-        //om båda spelare gjort move - se vem som vinner
-        if (game.getP1Move() != null && game.getP2Move() != null) {
-            String setWinner = runGame(game);
-            return ResponseEntity.ok(setWinner);
-        }
-
-
-        return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
 
     }
 
