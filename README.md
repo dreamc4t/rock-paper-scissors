@@ -60,7 +60,7 @@ Backend REST api för att spela sten sax påse. Skrivet i java mha maven och spr
             - prova ändra namnet till ”Testttt Spelarson” 
             - se om ResponseEntity är "Spelarnamnet finns ej. Glöm ej att det är case-sensitive!"
         - prova göra alla moves för de två spelarna ”Test Spelarsson” och ”Testare”, två åt gången
-            - scissors emot scissors - se om ResponseEntity innehåller ’oavgjort’
+            - scissors emot scissors - Se om returnerad game:s body innehåller ”winner”: "Oavjort"
                 - samt rock v rock och paper v paper
             - se om de respektive slår varanda (scissors slår paper, paper slår rock och rock slår scissors)
                 - Se om returnerad game:s body innehåller ”winner”: rätt spelares namn 
