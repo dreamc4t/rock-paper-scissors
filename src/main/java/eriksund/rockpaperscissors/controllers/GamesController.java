@@ -80,29 +80,43 @@ public class GamesController {
         //skapar move utifrån modellen move
         Move move = new Move(mo.getPlayerName(), mo.getMove().toLowerCase());
 
-        //if else för att se om movet som skickas med i body är 'rock', 'paper' eller 'scissors'
-        if (move.getMove().equals("rock")|| move.getMove().equals("paper") || move.getMove().equals("scissors")) {
-            if (game.getP1Name().equals(move.getPlayerName()) ) {
-                game.setP1Move(move.getMove());
+        //Skriver playername samt moverns move+namn som lokala variabler för att enklare kunna följa koden nedan
+        String p1Name = game.getP1Name();
+        String p2Name = game.getP2Name();
+        String moversName = move.getPlayerName();
+        String moversMove = move.getMove();
+
+
+        //Se om namnet finns i angivet spel, annars skicka felmeddelande
+        if (moversName.equals(p1Name) || moversName.equals(p2Name)  ){
+            //if else för att se om movet som skickas med i body är 'rock', 'paper' eller 'scissors'
+            if (moversMove.equals("rock")|| moversMove.equals("paper") || moversMove.equals("scissors")) {
+                if (p1Name.equals(moversName) ) {
+                    game.setP1Move(moversMove);
+                }
+                if (p2Name.equals(moversName) ) {
+                    game.setP2Move(moversMove);
+                }
+
+                //om båda spelare gjort move - se vem som vinner
+                if (game.getP1Move() != null && game.getP2Move() != null) {
+                    String setWinner = game.runGame();
+                    return ResponseEntity.ok(setWinner);
+                }
+
+
+                return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
             }
-            if (game.getP2Name().equals(move.getPlayerName()) ) {
-
-                game.setP2Move(move.getMove());
+            else {
+                return ResponseEntity.ok("Endast 'rock', 'paper' eller 'scissors' är tillåtna moves!");
             }
 
-
-            //om båda spelare gjort move - se vem som vinner
-            if (game.getP1Move() != null && game.getP2Move() != null) {
-                String setWinner = game.runGame();
-                return ResponseEntity.ok(setWinner);
-            }
-
-
-            return ResponseEntity.ok(String.format("%s gjorde sitt move - %s", move.getPlayerName(), move.getMove()));
+        } else {
+            return ResponseEntity.ok("Spelarnamnet finns ej. Glöm ej att det är case-sensitive!");
         }
-        else {
-            return ResponseEntity.ok("Endast 'rock', 'paper' eller 'scissors' är tillåtna moves!");
-        }
+
+
+
 
     }
 
